@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS StudentAdvisor;
 DROP TABLE IF EXISTS StudentDepartment;
 DROP TABLE IF EXISTS StudentProgram;
 DROP TABLE IF EXISTS Supervisor;
+DROP TABLE IF EXISTS StudentSupervisor;
 DROP TABLE IF EXISTS TeachingAssistant;
 DROP TABLE IF EXISTS Term;
 
