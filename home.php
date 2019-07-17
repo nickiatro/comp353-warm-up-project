@@ -36,7 +36,7 @@ if ($conn->connect_error) {
         color: darkred;
         font-weight: bold;
         font-size: 350%;
-        font-family: "Cambria Math";
+        font-family: "Cambria Math", sans-serif;
         border: 3px solid #b8860b;
         position: absolute;
         top: 50%;
@@ -54,7 +54,7 @@ if ($conn->connect_error) {
         color: lightgrey;
         font-weight: bold;
         font-size: 200%;
-        font-family: "Cambria Math";
+        font-family: "Cambria Math", sans-serif;
         border: 3px solid #f1f1f1;
         position: absolute;
         top: 50%;
@@ -71,7 +71,7 @@ if ($conn->connect_error) {
         color: lightgrey;
         font-weight: bold;
         font-size: 200%;
-        font-family: "Cambria Math";
+        font-family: "Cambria Math", sans-serif;
         border: 3px solid #f1f1f1;
         position: absolute;
         top: 50%;
@@ -89,7 +89,7 @@ if ($conn->connect_error) {
         color: lightgrey;
         font-weight: bold;
         font-size: 200%;
-        font-family: "Cambria Math";
+        font-family: "Cambria Math", sans-serif;
         border: 3px solid #f1f1f1;
         position: absolute;
         top: 50%;
