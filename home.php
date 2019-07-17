@@ -29,14 +29,96 @@ if ($conn->connect_error) {
         background-repeat: no-repeat;
         background-size: cover;
     }
+
+    .titleBox {
+        background-color: rgb(128, 128, 128);
+        background-color: rgba(128,128,128, 0.8);
+        color: darkred;
+        font-weight: bold;
+        font-size: 350%;
+        font-family: "Cambria Math";
+        border: 3px solid #b8860b;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -100%);
+        z-index: 2;
+        width: 80%;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .searchBox {
+        background-color: rgb(128, 128, 128);
+        background-color: rgba(128,128,128, 0.4);
+        color: lightgrey;
+        font-weight: bold;
+        font-size: 200%;
+        font-family: "Cambria Math";
+        border: 3px solid #f1f1f1;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, 10%);
+        z-index: 2;
+        width: 40%;
+        padding: 20px;
+        text-align: center;
+    }
+    .insertBox {
+        background-color: rgb(128, 128, 128);
+        background-color: rgba(128,128,128, 0.4);
+        color: lightgrey;
+        font-weight: bold;
+        font-size: 200%;
+        font-family: "Cambria Math";
+        border: 3px solid #f1f1f1;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, 120%);
+        z-index: 2;
+        width: 40%;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .deleteBox {
+        background-color: rgb(128, 128, 128);
+        background-color: rgba(128,128,128, 0.4);
+        color: lightgrey;
+        font-weight: bold;
+        font-size: 200%;
+        font-family: "Cambria Math";
+        border: 3px solid #f1f1f1;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, 230%);
+        z-index: 2;
+        width: 40%;
+        padding: 20px;
+        text-align: center;
+    }
+
 </style>
 <title>Welcome to the Concordia University Database System</title>
 <body>
 <div class="background"></div>
 <div class="titleBox">
-
+<p>Concordia University Database System <br />
+    <small>Welcome! </small> | <small>Bienvenue!</small>
+</p>
 </div>
-
+<div class="searchBox">
+    <p>Search Records</p>
+</div>
+<div class="insertBox">
+    <p>Insert Records</p>
+</div>
+<div class="deleteBox">
+    <p>Delete Records</p>
+</div>
 </body>
 </html>
 
