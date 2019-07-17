@@ -61,7 +61,7 @@ if ($conn->connect_error) {
         left: 50%;
         transform: translate(-50%, 10%);
         z-index: 2;
-        width: 40%;
+        width: 60%;
         padding: 20px;
         text-align: center;
     }
@@ -78,7 +78,7 @@ if ($conn->connect_error) {
         left: 50%;
         transform: translate(-50%, 120%);
         z-index: 2;
-        width: 40%;
+        width: 60%;
         padding: 20px;
         text-align: center;
     }
@@ -96,9 +96,13 @@ if ($conn->connect_error) {
         left: 50%;
         transform: translate(-50%, 230%);
         z-index: 2;
-        width: 40%;
+        width: 60%;
         padding: 20px;
         text-align: center;
+    }
+
+    a{
+        color: lightgrey;
     }
 
 </style>
@@ -111,13 +115,13 @@ if ($conn->connect_error) {
 </p>
 </div>
 <div class="searchBox">
-    <p>Search Records</p>
+    <a href="./search.php">Search Records</a>
 </div>
 <div class="insertBox">
-    <p>Insert Records</p>
+    <a href="./insert.php">Insert Records</a>
 </div>
 <div class="deleteBox">
-    <p>Delete Records</p>
+    <a href="./delete.php">Delete Records</a>
 </div>
 </body>
 </html>
