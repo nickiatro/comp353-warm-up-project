@@ -14,7 +14,7 @@ CREATE TABLE Program (
     name CHAR(100) NOT NULL,
     degree ENUM("undergraduate", "graduate") NOT NULL,
     credit_req INT UNSIGNED,
-    is_thesis_based BIT NOT NULL,
+    is_thesis_based BOOLEAN NOT NULL,
     department_id INT NOT NULL,
     CONSTRAINT FK_Department_Program FOREIGN KEY (department_id) REFERENCES Department(id)
 );
@@ -140,7 +140,7 @@ CREATE TABLE Supervisor (
     first_name CHAR(100) NOT NULL,
     last_name CHAR(100) NOT NULL,
     department_id INT NOT NULL,
-    has_research_funding BIT NOT NULL
+    has_research_funding BOOLEAN NOT NULL
 );
 
 CREATE TABLE StudentSupervisor (
@@ -151,5 +151,33 @@ CREATE TABLE StudentSupervisor (
     CONSTRAINT FK_Supervisor_StudentSupervisor FOREIGN KEY (supervisor_id) REFERENCES Supervisor(id)
 );
 
----- triggers
---CREATE TRIGGER default_credit BEFORE INSERT ON Program FOR EACH ROW IF NEW.credit_req IS NULL THEN NEW.credit_req = 90; END IF;
+-- triggers
+DELIMITER $$
+CREATE TRIGGER default_credit BEFORE INSERT ON Program FOR EACH ROW
+BEGIN
+    IF NEW.credit_req IS NULL THEN
+        IF NEW.degree = "undergraduate" THEN
+            SET NEW.credit_req = 90;
+        ELSE
+            SET NEW.credit_req = 44;
+        END IF;
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER one_or_more_programs AFTER INSERT ON Department FOR EACH ROW
+BEGIN
+    INSERT INTO Program(name, degree, is_thesis_based, department_id) VALUES("General Program", "undergraduate", 0, NEW.id);
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER passing_grade_prereqs BEFORE INSERT ON Class FOR EACH ROW
+BEGIN
+    IF EXISTS (SELECT gpa FROM Class, Section, Course, Prerequisite WHERE
+    New.section_id = Section.id AND New.student_id = Class.student_id AND Section.course_id = Prerequisite.course_id AND gpa < 0.7) THEN
+    SET New.student_id = -1;
+    END IF;
+END$$
+DELIMITER ;

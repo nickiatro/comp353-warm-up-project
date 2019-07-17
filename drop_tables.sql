@@ -20,3 +20,6 @@ DROP TABLE IF EXISTS StudentSupervisor;
 DROP TABLE IF EXISTS TeachingAssistant;
 DROP TABLE IF EXISTS Term;
 
+DROP TRIGGER IF EXISTS default_credit;
+DROP TRIGGER IF EXISTS passing_grade_prereqs;
+DROP TRIGGER IF EXISTS one_or_more_programs;
