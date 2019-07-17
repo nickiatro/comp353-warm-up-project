@@ -22,6 +22,7 @@ CREATE TABLE Program (
 CREATE TABLE Course (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name CHAR(100) NOT NULL,
+    code CHAR(15) NOT NULL,
     number INT NOT NULL,
     department_id INT NOT NULL,
     CONSTRAINT FK_Department_Course FOREIGN KEY (department_id) REFERENCES Department(id)
@@ -76,7 +77,7 @@ CREATE TABLE Class (
     student_id INT NOT NULL,
     section_id INT NOT NULL,
     grade_id INT NOT NULL,
-    gpa DECIMAL(3,2) NOT NULL,
+    --gpa DECIMAL(3,2) NOT NULL,
     PRIMARY KEY (student_id, section_id),
     CONSTRAINT FK_Student_Class FOREIGN KEY (student_id) REFERENCES Student(id),
     CONSTRAINT FK_Section_Class FOREIGN KEY (section_id) REFERENCES Section(id),
@@ -155,7 +156,7 @@ CREATE TABLE StudentSupervisor (
 DELIMITER $$
 CREATE TRIGGER default_credit BEFORE INSERT ON Program FOR EACH ROW
 BEGIN
-    IF NEW.credit_req IS NULL THEN
+    IF NEW.credit_req = 0 THEN
         IF NEW.degree = "undergraduate" THEN
             SET NEW.credit_req = 90;
         ELSE
