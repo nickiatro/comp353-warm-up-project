@@ -27,29 +27,53 @@ foreach ($fileContents as $token) {
         $tableNameFound++;
     }
 }
+fclose($sqlFile);
+$sqlFile = fopen("init_db.sql", "r");
+
+$attributes = [];
+$fileContents = explode("\n", fread($sqlFile, filesize("init_db.sql")));
+print_r($fileContents);
+
+$tableSelect = "style = \"visibility: hidden;\"";
+$attributeSelect = "style = \"visibility: hidden;\"";
+$enterCriteria = "style = \"visibility: hidden;\"";
 
 $tablesInQuery = "";
-
-if (isset($_POST["submit"])){
-    if(isset($_POST["tables"])){
-        for ($i=0; $i < count($_POST["tables"]); $i++) {
-            $tablesInQuery = $tablesInQuery. $_POST["tables"][$i];
-            if ($i + 1 != count($_POST["tables"])) {
+if ($tablesInQuery == "") {
+    if (isset($_POST["submit"])) {
+        if (isset($_POST["tables"])) {
+            for ($i = 0; $i < count($_POST["tables"]); $i++) {
+                $tablesInQuery = $tablesInQuery . $_POST["tables"][$i];
+                if ($i + 1 != count($_POST["tables"])) {
                     $tablesInQuery = $tablesInQuery . ", ";
+                }
             }
         }
     }
+    $tableSelect = "style = \"visibility: visible;\"";
 }
-$tableSelect = "";
-$attributeSelect = "style = \"visibility: hidden;\"";
-$enterCriteria = "style = \"visibility: hidden;\"";
 
 if ($tablesInQuery != "") {
     $tableSelect = "style = \"visibility: hidden;\"";
     $attributeSelect = "style = \"visibility: visible;\"";
 }
 
-$attributes = [];
+$attributesInQuery = "";
+
+if ($attributesInQuery == "" && $tablesInQuery != "") {
+    if (isset($_POST["submit"])) {
+        if (isset($_POST["attributes"])) {
+            for ($i = 0; $i < count($_POST["attributes"]); $i++) {
+                $attributesInQuery = $attributesInQuery . $_POST["attributes"][$i];
+                if ($i + 1 != count($_POST["attributes"])) {
+                    $attributesInQuery = $attributesInQuery . ", ";
+                }
+            }
+        }
+    }
+    $attributeSelect = "style = \"visibility: visible;\"";
+}
+
 ?>
 
 <!doctype html>
@@ -164,13 +188,7 @@ $attributes = [];
         <label>Please Enter the Search Criteria <br/>
             <small><em>Please Use MySQL Syntax</em></small>
         </label>
-        <?php
-        echo "<br/><select name=\"attributes[]\" multiple>";
-        foreach($attributes as $column) {
-            echo "<option value=\"$column\">$column</option>";
-        }
-        echo "</select><br/>";
-        ?>
+        <input type="text" name="search"/>
         <input type="submit" name="submit">
     </form>
 </div>
