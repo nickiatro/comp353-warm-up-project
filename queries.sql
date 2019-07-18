@@ -189,3 +189,22 @@ FROM
 GROUP BY program_id;
 
 -- Part V: For each relation R created in your database, report the result of the following SQL statement: SELECT COUNT(*) FROM R;
+SELECT COUNT(*) FROM StudentSupervisor;
+SELECT COUNT(*) FROM Supervisor; 
+SELECT COUNT(*) FROM StudentAdvisor; 
+SELECT COUNT(*) FROM Advisor;
+SELECT COUNT(*) FROM InstructorDepartment; 
+SELECT COUNT(*) FROM StudentDepartment;
+SELECT COUNT(*) FROM Prerequisite; 
+SELECT COUNT(*) FROM ResearchFunding;
+SELECT COUNT(*) FROM StudentProgram;
+SELECT COUNT(*) FROM Class;
+SELECT COUNT(*) FROM Section;
+SELECT COUNT(*) FROM Grade;
+SELECT COUNT(*) FROM TeachingAssistant;
+SELECT COUNT(*) FROM Instructor;
+SELECT COUNT(*) FROM Student;
+SELECT COUNT(*) FROM Course;
+SELECT COUNT(*) FROM Program;
+SELECT COUNT(*) FROM Term;
+SELECT COUNT(*) FROM Department;
