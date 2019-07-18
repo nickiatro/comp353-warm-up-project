@@ -267,14 +267,21 @@ VALUES (@nada, @computer_science_program),
        (@anna, @computer_science_program), 
        (@paul, @computer_science_program),
        (@odafin, @computer_science_program), 
-       (@anna, @human_relations);
+       (@anna, @human_relations),
+       (@odafin, @software_engineering),
+       (@anna, @software_engineering);
 
 INSERT INTO ResearchFunding(student_id)
 VALUES (@olivia),
        (@odafin),
        (@elliot),
        (@maximina),
-       (@laurel);
+       (@laurel),
+       (@Caire),
+       (@Marsha),
+       (@Manny),
+       (@Val),
+       (@Lucy);
 
 INSERT INTO Prerequisite(course_id, prerequisite_course_id) 
 VALUES (@comp353, @comp352), 
@@ -340,7 +347,8 @@ VALUES ((SELECT id FROM StudentProgram WHERE student_id = @nada AND program_id =
        ((SELECT id FROM StudentProgram WHERE student_id = @elliot AND program_id = @sociology), @advisor, @summer2019),
        ((SELECT id FROM StudentProgram WHERE student_id = @maximina AND program_id = @art_history), @advisor, @summer2019),
        ((SELECT id FROM StudentProgram WHERE student_id = @laurel AND program_id = @childhood_education), @advisor, @summer2019),
-       ((SELECT id FROM StudentProgram WHERE student_id = @don AND program_id = @computer_science_program), @advisor, @summer2019);
+       ((SELECT id FROM StudentProgram WHERE student_id = @don AND program_id = @computer_science_program), @advisor, @summer2019),
+       ((SELECT id FROM StudentProgram WHERE student_id = @anna AND program_id = @software_engineering), @advisor, @summer2019);
 
 INSERT INTO Supervisor(first_name, last_name, department_id, has_research_funding)
 VALUES ('Marge', 'Arin', @computer_science, 1),
