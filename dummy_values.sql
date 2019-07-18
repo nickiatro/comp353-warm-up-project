@@ -43,6 +43,8 @@ SET @summer2019 := (SELECT id FROM Term WHERE season = 'Summer' AND year = 2019)
 SET @fall2018 := (SELECT id FROM Term WHERE season = 'Fall' AND year = 2018);
 SET @winter2019 := (SELECT id FROM Term WHERE season = 'Fall' AND year = 2019);
 SET @fall2019 := (SELECT id FROM Term WHERE season = 'Fall' AND year = 2019);
+SET @winter2017 := (SELECT id FROM Term WHERE season = 'Winter' AND year = 2017); 
+SET @fall2017 := (SELECT id FROM Term WHERE season = 'Fall' AND year = 2017); 
 
 INSERT INTO Program(name, degree, credit_req, is_thesis_based, department_id) 
 VALUES ('Actuarial Mathematics', 'undergraduate', 0, 0, @mathematics),
@@ -110,9 +112,7 @@ VALUES ('Olivia', 'Benson', 3.0, 'graduate'),
        ('Eliseo', 'Piano', 3.3, 'graduate'),
        ('Mario', 'Speedwagon', 3.3, 'undergraduate'),
        ('Petey', 'Cruiser', 3.3, 'undergraduate'),
-       ('Anna', 'Sthesia', 2.3, 'undergraduate'),
-       ('Paul', 'Molive', 3.5, 'undergraduate'),
-       ('Anna', 'Mull', 1.3, 'undergraduate'),
+       ('Anna', 'Sthesia', 2.3, 'undergraduate'),       
 
        ('Vinny', 'Gret', 3.3, 'graduate'),
        ('Joyce', 'Tick', 3.3, 'graduate'),
@@ -147,20 +147,16 @@ SET @mario := (SELECT id FROM Student WHERE first_name = 'Mario');
 SET @petey := (SELECT id FROM Student WHERE first_name = 'Petey');
 SET @anna := (SELECT id FROM Student WHERE first_name = 'Anna');
 SET @paul := (SELECT id FROM Student WHERE first_name = 'Paul');
-SET @anna := (SELECT id FROM Student WHERE first_name = 'Anna');
-
 SET @Vinny := (SELECT id FROM Student WHERE first_name = 'Vinny');
 SET @Joyce := (SELECT id FROM Student WHERE first_name = 'Joyce');
 SET @Cliff := (SELECT id FROM Student WHERE first_name = 'Cliff');
 SET @Earl := (SELECT id FROM Student WHERE first_name = 'Earl');
 SET @Cooke := (SELECT id FROM Student WHERE first_name = 'Cooke');
-
 SET @Jen := (SELECT id FROM Student WHERE first_name = 'Jen');
 SET @Reanne := (SELECT id FROM Student WHERE first_name = 'Reanne');
 SET @Paul := (SELECT id FROM Student WHERE first_name = 'Paul');
 SET @Chris := (SELECT id FROM Student WHERE first_name = 'Chris');
 SET @Gio := (SELECT id FROM Student WHERE first_name = 'Gio');
-
 SET @Caire := (SELECT id FROM Student WHERE first_name = 'Caire');
 SET @Marsha := (SELECT id FROM Student WHERE first_name = 'Marsha');
 SET @Manny := (SELECT id FROM Student WHERE first_name = 'Manny');
@@ -217,19 +213,43 @@ INSERT INTO Grade(letter_grade, gpa) VALUES ('A+', 4.3),
                                             ('D-', 0.7),
                                             ('F', 0.0);
 
-INSERT INTO Section(course_id, term_id, instructor_id, classroom, capacity, start_time, end_time) 
-VALUES (@comp353, 1, 1, 'H901', 30, '08:00:00', '10:00:00'), 
-       (@comp353, 1, 1, 'H902', 30, '11:00:00', '13:00:00'), 
-       (@comp353, 1, 1, 'H903', 30, '14:00:00', '16:00:00'), 
-       (@comp352, 2, 1, 'H904', 30, '08:00:00', '10:00:00'),
-       (@comp352, 2, 1, 'H907', 30, '08:00:00', '10:00:00'),
-       (@comp352, 2, 1, 'H907', 30, '08:00:00', '10:00:00'),
-       (@comp339, 2, 1, 'H907', 30, '08:00:00', '10:00:00'),
-       (@comp339, 2, 1, 'H907', 30, '08:00:00', '10:00:00'),
-       (@comp339, 2, 1, 'H907', 30, '08:00:00', '10:00:00'),
-       (@chem201, 2, 1, 'H907', 30, '08:00:00', '10:00:00');
+-- Grade variables
+SET @aplus := (SELECT id FROM Grade WHERE letter_grade = 'A+');
+SET @a := (SELECT id FROM Grade WHERE letter_grade = 'A');
+SET @aminus := (SELECT id FROM Grade WHERE letter_grade = 'A-');
+SET @bplus := (SELECT id FROM Grade WHERE letter_grade = 'B+');
+SET @b := (SELECT id FROM Grade WHERE letter_grade = 'B');
+SET @bminus := (SELECT id FROM Grade WHERE letter_grade = 'B-');
 
--- INSERT INTO Class(student_id, section_id, grade_id) VALUES (1, 1, 1, 4.0), (1, 2, 2, 4.0), (1, 3, 3, 0.0);
+INSERT INTO Section(course_id, term_id, instructor_id, classroom, capacity, start_time, end_time) 
+VALUES (@comp353, @summer2019, @brendan, 'H901', 30, '08:00:00', '10:00:00'), 
+       (@comp353, @summer2019, @alex, 'H902', 30, '11:00:00', '13:00:00'), 
+       (@comp353, @summer2019, @guillermo, 'H903', 30, '14:00:00', '16:00:00'), 
+       (@comp352, @fall2018, @alex, 'H904', 30, '08:00:00', '10:00:00'),
+       (@comp352, @fall2018, @alex, 'H905', 30, '11:00:00', '13:00:00'),
+       (@comp352, @fall2018, @alex, 'H906', 30, '14:00:00', '16:00:00'),
+       (@comp339, @summer2019, @vladimir, 'H907', 30, '08:00:00', '10:00:00'),
+       (@comp339, @summer2019, @piter, 'H908', 30, '11:00:00', '13:00:00'),
+       (@comp339, @summer2019, @john, 'H909', 30, '14:00:00', '16:00:00'),
+       (@chem201, @summer2019, @gary, 'H910', 30, '08:00:00', '10:00:00'),
+       (@comp352, @winter2017, @leto, 'H904', 30, '08:00:00', '10:00:00'),
+       (@comp352, @winter2017, @leto, 'H905', 30, '11:00:00', '13:00:00'),
+       (@comp352, @winter2017, @guillermo, 'H906', 30, '14:00:00', '16:00:00'),
+       (@comp352, @fall2017, @duncan, 'H904', 30, '08:00:00', '10:00:00'),
+       (@comp352, @fall2017, @russell, 'H905', 30, '11:00:00', '13:00:00');
+
+INSERT INTO Class(student_id, section_id, grade_id) 
+VALUES (@odafin, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @aplus),
+       (@nada, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @aplus),
+       (@eliseo, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @aplus),
+       (@don, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @a),
+       (@dominick, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @a),       
+       (@amanda, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @aminus),
+       (@mario, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @b),
+       (@petey, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @bminus),
+       (@Lucy, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @aplus),    
+       (@anna, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @bplus),
+       (@paul, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @b);
 
 INSERT INTO StudentProgram(student_id, program_id) 
 VALUES (@nada, @computer_science_program), 
@@ -245,8 +265,9 @@ VALUES (@nada, @computer_science_program),
        (@mario, @computer_science_program),
        (@petey, @computer_science_program), 
        (@anna, @computer_science_program), 
-       (@paul, @computer_science_program), 
-       (@anna, @computer_science_program);
+       (@paul, @computer_science_program),
+       (@odafin, @computer_science_program), 
+       (@anna, @human_relations);
 
 INSERT INTO ResearchFunding(student_id)
 VALUES (@olivia),
@@ -281,8 +302,7 @@ VALUES (@olivia, @humanities),
        (@mario, @computer_science),
        (@petey, @computer_science),
        (@anna, @computer_science),
-       (@paul, @computer_science),
-       (@anna, @computer_science);
+       (@paul, @computer_science);
 
 INSERT INTO InstructorDepartment(instructor_id, department_id)
 VALUES (@brendan, @computer_science),
@@ -306,22 +326,21 @@ VALUES ('Vatika', 'Prasad'),
        ('Buggie', 'Singh'),
        ('Priyanka', 'Chopra'),
        ('Mickey', 'Mouse'),
-       ('Mini', 'Xyz');		
+       ('Mini', 'Xyz');
 
 SET @advisor := (SELECT id FROM Advisor WHERE first_name = 'Vatika');
 
 INSERT INTO StudentAdvisor(student_program_id, advisor_id, term_id)
-VALUES ((SELECT id FROM StudentProgram WHERE student_id = @nada AND program_id = computer_science_program), @advisor, @summer2019),
-       ((SELECT id FROM StudentProgram WHERE student_id = @eliseo AND program_id = computer_science_program), @advisor, @summer2019),
-       ((SELECT id FROM StudentProgram WHERE student_id = @dominick AND program_id = computer_science_program), @advisor, @summer2019),
-       ((SELECT id FROM StudentProgram WHERE student_id = @amanda AND program_id = computer_science_program), @advisor, @summer2019),
-       ((SELECT id FROM StudentProgram WHERE student_id = @olivia AND program_id = computer_science_program), @advisor, @summer2019),
-
-       ((SELECT id FROM StudentProgram WHERE student_id = @odafin AND program_id = computer_science_program), @advisor, @summer2019),
-       ((SELECT id FROM StudentProgram WHERE student_id = @elliot AND program_id = computer_science_program), @advisor, @summer2019),
-       ((SELECT id FROM StudentProgram WHERE student_id = @maximina AND program_id = computer_science_program), @advisor, @summer2019),
-       ((SELECT id FROM StudentProgram WHERE student_id = @laurel AND program_id = computer_science_program), @advisor, @summer2019),
-       ((SELECT id FROM StudentProgram WHERE student_id = @don AND program_id = computer_science_program), @advisor, @summer2019);
+VALUES ((SELECT id FROM StudentProgram WHERE student_id = @nada AND program_id = @computer_science_program), @advisor, @summer2019),
+       ((SELECT id FROM StudentProgram WHERE student_id = @eliseo AND program_id = @computer_science_program), @advisor, @summer2019),
+       ((SELECT id FROM StudentProgram WHERE student_id = @dominick AND program_id = @computer_science_program), @advisor, @summer2019),
+       ((SELECT id FROM StudentProgram WHERE student_id = @amanda AND program_id = @computer_science_program), @advisor, @summer2019),
+       ((SELECT id FROM StudentProgram WHERE student_id = @olivia AND program_id = @human_relations), @advisor, @summer2019),
+       ((SELECT id FROM StudentProgram WHERE student_id = @odafin AND program_id = @computer_science_program), @advisor, @summer2019),
+       ((SELECT id FROM StudentProgram WHERE student_id = @elliot AND program_id = @sociology), @advisor, @summer2019),
+       ((SELECT id FROM StudentProgram WHERE student_id = @maximina AND program_id = @art_history), @advisor, @summer2019),
+       ((SELECT id FROM StudentProgram WHERE student_id = @laurel AND program_id = @childhood_education), @advisor, @summer2019),
+       ((SELECT id FROM StudentProgram WHERE student_id = @don AND program_id = @computer_science_program), @advisor, @summer2019);
 
 INSERT INTO Supervisor(first_name, last_name, department_id, has_research_funding)
 VALUES ('Marge', 'Arin', @computer_science, 1),

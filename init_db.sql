@@ -77,7 +77,6 @@ CREATE TABLE Class (
     student_id INT NOT NULL,
     section_id INT NOT NULL,
     grade_id INT NOT NULL,
-    --gpa DECIMAL(3,2) NOT NULL,
     PRIMARY KEY (student_id, section_id),
     CONSTRAINT FK_Student_Class FOREIGN KEY (student_id) REFERENCES Student(id),
     CONSTRAINT FK_Section_Class FOREIGN KEY (section_id) REFERENCES Section(id),
