@@ -1,11 +1,11 @@
 -- only run this after you have initialised the database.
 
-INSERT INTO Department(name) 
-VALUES ('Mathematics'), 
-       ('Computer Science and Engineering'), 
-       ('Biology'), 
-       ('Physics'), 
-       ('Chemistry'), 
+INSERT INTO Department(name)
+VALUES ('Mathematics'),
+       ('Computer Science and Engineering'),
+       ('Biology'),
+       ('Physics'),
+       ('Chemistry'),
        ('Humanities'),
        ('Business'),
        ('Social Sciences'),
@@ -18,23 +18,23 @@ SET @computer_science := (SELECT id FROM Department WHERE name = 'Computer Scien
 SET @biology := (SELECT id FROM Department WHERE name = 'Biology');
 SET @physics := (SELECT id FROM Department WHERE name = 'Physics');
 SET @chemistry := (SELECT id FROM Department WHERE name = 'Chemistry');
-SET @humanities := (SELECT id FROM Department WHERE name = 'Humanities'); 
+SET @humanities := (SELECT id FROM Department WHERE name = 'Humanities');
 SET @business := (SELECT id FROM Department WHERE name = 'Business');
 SET @social_sciences := (SELECT id FROM Department WHERE name = 'Social Sciences');
 SET @history := (SELECT id FROM Department WHERE name = 'History');
 SET @education := (SELECT id FROM Department WHERE name = 'Education');
 
-INSERT INTO Term(season, year) 
+INSERT INTO Term(season, year)
 VALUES  ('Winter', 2017),
         ('Fall', 2017),
         ('Summer', 2017),
         ('Winter', 2018),
         ('Fall', 2018),
         ('Summer', 2018),
-        ('Winter', 2019), 
+        ('Winter', 2019),
         ('Fall', 2019),
         ('Summer', 2019),
-        ('Winter', 2020), 
+        ('Winter', 2020),
         ('Summer', 2020),
         ('Fall', 2020);
 
@@ -43,10 +43,10 @@ SET @summer2019 := (SELECT id FROM Term WHERE season = 'Summer' AND year = 2019)
 SET @fall2018 := (SELECT id FROM Term WHERE season = 'Fall' AND year = 2018);
 SET @winter2019 := (SELECT id FROM Term WHERE season = 'Fall' AND year = 2019);
 SET @fall2019 := (SELECT id FROM Term WHERE season = 'Fall' AND year = 2019);
-SET @winter2017 := (SELECT id FROM Term WHERE season = 'Winter' AND year = 2017); 
-SET @fall2017 := (SELECT id FROM Term WHERE season = 'Fall' AND year = 2017); 
+SET @winter2017 := (SELECT id FROM Term WHERE season = 'Winter' AND year = 2017);
+SET @fall2017 := (SELECT id FROM Term WHERE season = 'Fall' AND year = 2017);
 
-INSERT INTO Program(name, degree, credit_req, is_thesis_based, department_id) 
+INSERT INTO Program(name, degree, credit_req, is_thesis_based, department_id)
 VALUES ('Actuarial Mathematics', 'undergraduate', 0, 0, @mathematics),
        ('Computer Science', 'undergraduate', 0, 0, @computer_science),
        ('Software Engineering', 'undergraduate', 0, 0, @computer_science),
@@ -72,21 +72,21 @@ SET @sociology := (SELECT id FROM Program WHERE name = 'Sociology');
 SET @art_history := (SELECT id FROM Program WHERE name = 'Art History');
 SET @childhood_education := (SELECT id FROM Program WHERE name = 'Childhood Education');
 
-INSERT INTO Course(name, code, number, department_id) 
-VALUES ('Number Theory', 'MATH', 200, @mathematics), 
-       ('Combinatorics', 'COMP', 339, @computer_science), 
-       ('Data Structures and Algorithms', 'COMP', 352, @computer_science), 
-       ('Databases', 'COMP', 353, @computer_science), 
+INSERT INTO Course(name, code, number, department_id)
+VALUES ('Number Theory', 'MATH', 200, @mathematics),
+       ('Combinatorics', 'COMP', 339, @computer_science),
+       ('Data Structures and Algorithms', 'COMP', 352, @computer_science),
+       ('Databases', 'COMP', 353, @computer_science),
        ('Fundamental Nutrition', 'BIOL', 203, @biology),
-       ('Electromagnetism', 'PHYS', 200, @physics), 
+       ('Electromagnetism', 'PHYS', 200, @physics),
        ('Relativity', 'PHYS', 300, @physics),
-       ('Thermodynamics', 'CHEM', 201, @chemistry), 
+       ('Thermodynamics', 'CHEM', 201, @chemistry),
        ('Methodology', 'HUMA', 888, @humanities),
        ('Financial Reporting III', 'ACCO', 420, @business),
        ('Debates & Challenges in Contemporary Quebec Society', 'SOCI', 280, @social_sciences),
        ('Modern Europe', 'HIST', 202, @history),
        ('Educational Communication', 'EDUC', 270, @education),
-       ('Object Oriented Programming I', 'COMP', 248, @computer_science), 
+       ('Object Oriented Programming I', 'COMP', 248, @computer_science),
        ('Object Oriented Programming I', 'COMP', 249, @computer_science),
        ('Principles of Programming Languages', 'COMP', 348, @computer_science);
 
@@ -99,12 +99,12 @@ SET @comp248 := (SELECT id FROM Course WHERE code = 'COMP' AND number = 248);
 SET @comp249 := (SELECT id FROM Course WHERE code = 'COMP' AND number = 249);
 SET @comp348 := (SELECT id FROM Course WHERE code = 'COMP' AND number = 348);
 
-INSERT INTO Student(first_name, last_name, gpa, degree) 
+INSERT INTO Student(first_name, last_name, gpa, degree)
 VALUES ('Olivia', 'Benson', 3.0, 'graduate'),
-       ('Odafin', 'Tutuola', 2.2, 'graduate'), 
-       ('Amanda', 'Rollins', 3.2, 'graduate'), 
-       ('Dominick', 'Carisi', 2.8, 'graduate'), 
-       ('Elliot', 'Stabler', 3.0, 'graduate'), 
+       ('Odafin', 'Tutuola', 2.2, 'graduate'),
+       ('Amanda', 'Rollins', 3.2, 'graduate'),
+       ('Dominick', 'Carisi', 2.8, 'graduate'),
+       ('Elliot', 'Stabler', 3.0, 'graduate'),
        ('Don', 'Cragen', 4.3, 'graduate'),
        ('Maximina', 'Specht', 2.0, 'graduate'),
        ('Laurel', 'Sherrod', 3.3, 'graduate'),
@@ -112,7 +112,7 @@ VALUES ('Olivia', 'Benson', 3.0, 'graduate'),
        ('Eliseo', 'Piano', 3.3, 'graduate'),
        ('Mario', 'Speedwagon', 3.3, 'undergraduate'),
        ('Petey', 'Cruiser', 3.3, 'undergraduate'),
-       ('Anna', 'Sthesia', 2.3, 'undergraduate'),       
+       ('Anna', 'Sthesia', 2.3, 'undergraduate'),
 
        ('Vinny', 'Gret', 3.3, 'graduate'),
        ('Joyce', 'Tick', 3.3, 'graduate'),
@@ -163,18 +163,18 @@ SET @Manny := (SELECT id FROM Student WHERE first_name = 'Manny');
 SET @Val := (SELECT id FROM Student WHERE first_name = 'Val');
 SET @Lucy := (SELECT id FROM Student WHERE first_name = 'Lucy');
 
-INSERT INTO Instructor(first_name, last_name) 
-VALUES ('Brendan', 'Atreides'), 
-       ('Leto', 'Atreides'), 
-       ('Duncan', 'Idaho'), 
-       ('Vladimir', 'Harkonnen'), 
+INSERT INTO Instructor(first_name, last_name)
+VALUES ('Brendan', 'Atreides'),
+       ('Leto', 'Atreides'),
+       ('Duncan', 'Idaho'),
+       ('Vladimir', 'Harkonnen'),
        ('Piter', 'de Vries'),
        ('John', 'Smith'),
        ('Russell', 'Alessi'),
        ('Guillermo', 'Wintheiser'),
        ('Alex', 'Lee'),
        ('Gary', 'Lee');
-    
+
 -- Instructor variables
 SET @brendan := (SELECT id FROM Instructor WHERE first_name = 'Brendan');
 SET @leto := (SELECT id FROM Instructor WHERE first_name = 'Leto');
@@ -187,22 +187,23 @@ SET @guillermo := (SELECT id FROM Instructor WHERE first_name = 'Guillermo');
 SET @alex := (SELECT id FROM Instructor WHERE first_name = 'Alex');
 SET @gary := (SELECT id FROM Instructor WHERE first_name = 'Gary');
 
-INSERT INTO TeachingAssistant(student_id, course_id, term_id, num_hours)
-VALUES (@don, @comp353, @summer2019, 50),
-       (@don, @comp352, @winter2019, 50),
-       (@don, @comp339, @fall2019, 50),
-       (@nada, @comp353, @summer2019, 50),
-       (@nada, @comp352, @winter2019, 50),
-       (@nada, @comp339, @fall2019, 50),
-       (@eliseo, @comp353, @winter2019, 50),
-       (@eliseo, @comp352, @summer2019, 50),
-       (@eliseo, @comp339, @fall2019, 50),
-       (@amanda, @comp339, @fall2019, 50);
 
-INSERT INTO Grade(letter_grade, gpa) VALUES ('A+', 4.3), 
-                                            ('A', 4.0), 
-                                            ('A-', 3.7), 
-                                            ('B+', 3.3), 
+INSERT INTO TeachingAssistant(student_id, section_id, num_hours)
+VALUES (@don, 1, 50),
+       (@don, 2, 50),
+       (@don, 3, 50),
+       (@nada, 4, 50),
+       (@nada, 5, 50),
+       (@nada, 6, 50),
+       (@eliseo, 7, 50),
+       (@eliseo, 8, 50),
+       (@eliseo, 9, 50),
+       (@amanda, 10, 50);
+
+INSERT INTO Grade(letter_grade, gpa) VALUES ('A+', 4.3),
+                                            ('A', 4.0),
+                                            ('A-', 3.7),
+                                            ('B+', 3.3),
                                             ('B', 3.0),
                                             ('B-', 2.7),
                                             ('C+', 2.3),
@@ -221,10 +222,10 @@ SET @bplus := (SELECT id FROM Grade WHERE letter_grade = 'B+');
 SET @b := (SELECT id FROM Grade WHERE letter_grade = 'B');
 SET @bminus := (SELECT id FROM Grade WHERE letter_grade = 'B-');
 
-INSERT INTO Section(course_id, term_id, instructor_id, classroom, capacity, start_time, end_time) 
-VALUES (@comp353, @summer2019, @brendan, 'H901', 30, '08:00:00', '10:00:00'), 
-       (@comp353, @summer2019, @alex, 'H902', 30, '11:00:00', '13:00:00'), 
-       (@comp353, @summer2019, @guillermo, 'H903', 30, '14:00:00', '16:00:00'), 
+INSERT INTO Section(course_id, term_id, instructor_id, classroom, capacity, start_time, end_time)
+VALUES (@comp353, @summer2019, @brendan, 'H901', 30, '08:00:00', '10:00:00'),
+       (@comp353, @summer2019, @alex, 'H902', 30, '11:00:00', '13:00:00'),
+       (@comp353, @summer2019, @guillermo, 'H903', 30, '14:00:00', '16:00:00'),
        (@comp352, @fall2018, @alex, 'H904', 30, '08:00:00', '10:00:00'),
        (@comp352, @fall2018, @alex, 'H905', 30, '11:00:00', '13:00:00'),
        (@comp352, @fall2018, @alex, 'H906', 30, '14:00:00', '16:00:00'),
@@ -238,35 +239,35 @@ VALUES (@comp353, @summer2019, @brendan, 'H901', 30, '08:00:00', '10:00:00'),
        (@comp352, @fall2017, @duncan, 'H904', 30, '08:00:00', '10:00:00'),
        (@comp352, @fall2017, @russell, 'H905', 30, '11:00:00', '13:00:00');
 
-INSERT INTO Class(student_id, section_id, grade_id) 
+INSERT INTO Class(student_id, section_id, grade_id)
 VALUES (@odafin, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @aplus),
        (@nada, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @aplus),
        (@eliseo, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @aplus),
        (@don, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @a),
-       (@dominick, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @a),       
+       (@dominick, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @a),
        (@amanda, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @aminus),
        (@mario, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @b),
        (@petey, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @bminus),
-       (@Lucy, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @aplus),    
+       (@Lucy, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @aplus),
        (@anna, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @bplus),
        (@paul, (SELECT id FROM Section WHERE course_id = @comp353 AND term_id = @summer2019 AND instructor_id = @brendan), @b);
 
-INSERT INTO StudentProgram(student_id, program_id) 
-VALUES (@nada, @computer_science_program), 
-       (@eliseo, @computer_science_program), 
+INSERT INTO StudentProgram(student_id, program_id)
+VALUES (@nada, @computer_science_program),
+       (@eliseo, @computer_science_program),
        (@don, @computer_science_program),
-       (@dominick, @computer_science_program), 
-       (@amanda, @computer_science_program), 
+       (@dominick, @computer_science_program),
+       (@amanda, @computer_science_program),
        (@olivia, @human_relations),
-       (@odafin, @accountancy), 
-       (@elliot, @sociology), 
+       (@odafin, @accountancy),
+       (@elliot, @sociology),
        (@maximina, @art_history),
        (@laurel, @childhood_education),
        (@mario, @computer_science_program),
-       (@petey, @computer_science_program), 
-       (@anna, @computer_science_program), 
+       (@petey, @computer_science_program),
+       (@anna, @computer_science_program),
        (@paul, @computer_science_program),
-       (@odafin, @computer_science_program), 
+       (@odafin, @computer_science_program),
        (@anna, @human_relations),
        (@odafin, @software_engineering),
        (@anna, @software_engineering);
@@ -283,9 +284,9 @@ VALUES (@olivia),
        (@Val),
        (@Lucy);
 
-INSERT INTO Prerequisite(course_id, prerequisite_course_id) 
-VALUES (@comp353, @comp352), 
-       (@comp353, @comp339), 
+INSERT INTO Prerequisite(course_id, prerequisite_course_id)
+VALUES (@comp353, @comp352),
+       (@comp353, @comp339),
        (@comp353, @comp248),
        (@comp353, @comp249),
        (@comp353, @comp348),

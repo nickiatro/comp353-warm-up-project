@@ -1,5 +1,5 @@
 -- 1) Find ID, first name and last name of all the students who have taken Database course and received an A or A+ grade for the course.
-SELECT 
+SELECT
     Student.Id AS ID,
     Student.first_name AS First_Name,
     Student.last_name AS Last_Name
@@ -20,7 +20,7 @@ WHERE
 
 
 -- 2) Find ID, first name, last name and number of programs of students who are enrolled in at least two different programs in the Computer Science department.
-SELECT 
+SELECT
     StudentProgram.student_id AS ID,
     Student.first_name AS First_Name,
     Student.last_name AS Last_Name,
@@ -36,9 +36,10 @@ FROM
 WHERE
     Department.name = 'Computer Science and Engineering'
 GROUP BY StudentProgram.student_id
-HAVING COUNT(StudentProgram.id) >= 2
+HAVING COUNT(StudentProgram.id) >= 2;
 
 -- (3) Find the name of all the instructors who taught Comp 352 in the fall term of 2018 but have never taught the same course before.
+
 SELECT DISTINCT
     Instructor.id AS ID,
     CONCAT(Instructor.last_name,
@@ -76,7 +77,7 @@ WHERE
 
 -- (4) Find the name and IDs of all the undergraduate students who do not have an advisor.
 
-SELECT 
+SELECT
     Program.name AS Name, Program.credit_req AS Credits_Required
 FROM
     Program
@@ -85,7 +86,7 @@ FROM
         AND Department.name = 'Computer Science and Engineering';
 
 -- (5) Find the name and IDs of all the undergraduate students who do not have an advisor
-SELECT 
+SELECT
     Student.id AS ID,
     CONCAT(Student.last_name,
             ', ',
@@ -94,7 +95,7 @@ FROM
     Student
 WHERE
     degree = 'Undergraduate'
-        AND id NOT IN (SELECT 
+        AND id NOT IN (SELECT
             Student.id
         FROM
             StudentAdvisor
@@ -106,7 +107,7 @@ WHERE
             Student.degree = 'Undergraduate');
 
 -- (6) Find the ID, name and assignment mandate of all the graduate students who are assigned as teaching assistants to Comp 353 for the summer term of 2019
-SELECT 
+SELECT
     TeachingAssistant.student_id AS ID,
     CONCAT(Student.last_name,
             ', ',
@@ -115,19 +116,21 @@ SELECT
 FROM
     TeachingAssistant
         INNER JOIN
-    Course ON TeachingAssistant.course_id = Course.id
-        INNER JOIN
-    Term ON TeachingAssistant.term_id = Term.id
+    Section ON TeachingAssistant.section_id = Section.id
         INNER JOIN
     Student ON TeachingAssistant.student_id = Student.id
+        INNER JOIN
+    Course ON Section.course_id = Course.id
+        INNER JOIN
+    Term ON Section.term_id = Term.id
 WHERE
-    Course.Code = 'COMP'
+    Course.code = 'COMP'
         AND Course.number = 353
         AND Term.season = 'Summer'
         AND Term.year = 2019;
 
 -- (7) Find the name of all the supervisors in the Computer Science department who have supervised at least 20 students.
-SELECT 
+SELECT
     CONCAT(Supervisor.last_name,
             ', ',
             Supervisor.first_name) AS Name
@@ -139,7 +142,7 @@ GROUP BY StudentSupervisor.supervisor_id
 HAVING COUNT(StudentSupervisor.student_id) >= 20;
 
 -- (8) Find the details of all the courses offered by the Computer Science department for the summer term of 2019. Details include Course name, section, room location, start and end time, professor teaching the course, max class capacity and number of enrolled students.
-SELECT 
+SELECT
     Course.name AS Name,
     Section.Id AS Section,
     Section.classroom AS Location,
@@ -149,7 +152,7 @@ SELECT
     Section.start_time AS Start_time,
     Section.end_time AS End_time,
     Section.capacity AS Max_class_capacity,
-    (SELECT 
+    (SELECT
             COUNT(*)
         FROM
             Class
@@ -171,7 +174,7 @@ WHERE
         AND Term.year = 2019;
 
 -- (9) For each department, find the total number of courses offered by the department.
-SELECT 
+SELECT
     Department.name AS Name, COUNT(Course.id) AS Num_of_courses
 FROM
     Course
@@ -180,7 +183,7 @@ FROM
 GROUP BY department_id;
 
 -- (10) For each program, find the total number of students enrolled into the program.
-SELECT 
+SELECT
     Program.name AS Name, COUNT(student_id) AS Num_of_students
 FROM
     StudentProgram
@@ -190,12 +193,12 @@ GROUP BY program_id;
 
 -- Part V: For each relation R created in your database, report the result of the following SQL statement: SELECT COUNT(*) FROM R;
 SELECT COUNT(*) FROM StudentSupervisor;
-SELECT COUNT(*) FROM Supervisor; 
-SELECT COUNT(*) FROM StudentAdvisor; 
+SELECT COUNT(*) FROM Supervisor;
+SELECT COUNT(*) FROM StudentAdvisor;
 SELECT COUNT(*) FROM Advisor;
-SELECT COUNT(*) FROM InstructorDepartment; 
+SELECT COUNT(*) FROM InstructorDepartment;
 SELECT COUNT(*) FROM StudentDepartment;
-SELECT COUNT(*) FROM Prerequisite; 
+SELECT COUNT(*) FROM Prerequisite;
 SELECT COUNT(*) FROM ResearchFunding;
 SELECT COUNT(*) FROM StudentProgram;
 SELECT COUNT(*) FROM Class;

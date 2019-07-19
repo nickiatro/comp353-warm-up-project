@@ -44,13 +44,11 @@ CREATE TABLE Instructor (
 
 CREATE TABLE TeachingAssistant (
     student_id INT NOT NULL,
-    course_id INT NOT NULL,
-    term_id INT NOT NULL,
+    section_id INT NOT NULL,
     num_hours INT NOT NULL,
-    PRIMARY KEY (student_id, course_id, term_id),
+    PRIMARY KEY (student_id, section_id),
     CONSTRAINT FK_Student_TeachingAssistant FOREIGN KEY (student_id) REFERENCES Student(id),
-    CONSTRAINT FK_Course_TeachingAssistant FOREIGN KEY (course_id) REFERENCES Course(id),
-    CONSTRAINT FK_Term_TeachingAssistant FOREIGN KEY (term_id) REFERENCES Term(id)
+    CONSTRAINT FK_Course_TeachingAssistant FOREIGN KEY (section_id) REFERENCES Course(id)
 );
 
 CREATE TABLE Grade (
@@ -146,6 +144,7 @@ CREATE TABLE Supervisor (
 CREATE TABLE StudentSupervisor (
     student_id INT NOT NULL,
     supervisor_id INT NOT NULL,
+    granted_funding BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (student_id, supervisor_id),
     CONSTRAINT FK_Student_StudentSupervisor FOREIGN KEY (student_id) REFERENCES Student(id),
     CONSTRAINT FK_Supervisor_StudentSupervisor FOREIGN KEY (supervisor_id) REFERENCES Supervisor(id)
@@ -163,21 +162,85 @@ BEGIN
         END IF;
     END IF;
 END$$
-DELIMITER ;
 
 DELIMITER $$
 CREATE TRIGGER one_or_more_programs AFTER INSERT ON Department FOR EACH ROW
 BEGIN
     INSERT INTO Program(name, degree, is_thesis_based, department_id) VALUES("General Program", "undergraduate", 0, NEW.id);
 END$$
-DELIMITER ;
 
 DELIMITER $$
 CREATE TRIGGER passing_grade_prereqs BEFORE INSERT ON Class FOR EACH ROW
 BEGIN
-    IF EXISTS (SELECT gpa FROM Class, Section, Course, Prerequisite WHERE
-    New.section_id = Section.id AND New.student_id = Class.student_id AND Section.course_id = Prerequisite.course_id AND gpa < 0.7) THEN
+    IF EXISTS (SELECT gpa FROM Grade, Class, Section, Course, Prerequisite WHERE
+    New.section_id = Section.id AND New.student_id = Class.student_id AND Section.course_id = Prerequisite.course_id AND Class.grade_id = Grade.id AND gpa < 0.7) THEN
     SET New.student_id = -1;
     END IF;
 END$$
+
+DELIMITER $$
+CREATE TRIGGER only_one_section_of_same_class BEFORE INSERT ON Class FOR EACH ROW
+BEGIN
+    IF EXISTS (SELECT course_id, term_id FROM Section WHERE NEW.section_id = Section.id IN (
+        SELECT 1 FROM Class, Section WHERE
+        NEW.student_id = Class.student_id AND Class.section_id = Section.id)) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "invalid action: Student is already registered in this course for this term.";
+    END IF;
+END$$
+
+DELIMITER $$
+CREATE TRIGGER no_conflicting_time_courses_instructor BEFORE INSERT ON Section FOR EACH ROW
+BEGIN
+    IF EXISTS (SELECT start_time, end_time FROM Section WHERE (NEW.instructor_id = Section.instructor_id AND NEW.term_id = Section.term_id) AND ((New.start_time >= Section.start_time AND NEW.start_time < Section.end_time OR (NEW.start_time <= Section.start_time AND NEW.end_time > Section.end_time)))) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Instructor is already teaching a course at this time";
+    END IF;
+END$$
+
+-- new section to be added = n, old sections already there = o
+DELIMITER $$
+CREATE TRIGGER no_conflicting_time_courses_student BEFORE INSERT ON Class FOR EACH ROW
+BEGIN
+    IF EXISTS  (SELECT n.start_time, n.end_time  FROM Section AS n, Section as o, Class WHERE NEW.student_id = Class.student_id AND Class.section_id = o.id AND n.id = New.section_id AND n.term_id = o.term_id AND ((n.start_time >= o.start_time AND n.start_time < o.end_time OR (n.start_time >= o.start_time AND n.end_time > o.end_time)))) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Student is already taking a course at this time";
+    END IF;
+END$$
+
+DELIMITER $$
+CREATE TRIGGER grad_student_supervisor_funding_insert BEFORE INSERT ON StudentSupervisor FOR EACH ROW
+BEGIN
+    IF EXISTS(SELECT * FROM Student, Supervisor WHERE NEW.supervisor_id = Supervisor.id AND Student.id = NEW.student_id AND (has_research_funding = FALSE OR Student.gpa < 3.0) AND NEW.granted_funding = TRUE) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Supervisor has no funding available, or student has insufficient GPA";
+    END IF;
+END$$
+
+DELIMITER $$
+CREATE TRIGGER grad_student_supervisor_funding_update BEFORE UPDATE ON StudentSupervisor FOR EACH ROW
+BEGIN
+    IF EXISTS(SELECT * FROM Student,Supervisor WHERE NEW.supervisor_id = Supervisor.id AND Student.id = NEW.student_id AND (has_research_funding = FALSE OR Student.gpa < 3.0) AND NEW.granted_funding = TRUE) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Supervisor has no funding available, or student has insufficient GPA";
+    END IF;
+END$$
+
+DELIMITER $$
+CREATE TRIGGER grad_student_TA_signup BEFORE INSERT ON TeachingAssistant FOR EACH ROW
+BEGIN
+    IF EXISTS(SELECT * FROM Student, TeachingAssistant WHERE NEW.student_id = Student.id = TeachingAssistant.student_id AND (Student.gpa < 3.2 OR Student.degree = "undergraduate")) THEN
+    IF EXISTS()
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Student has insufficient GPA, or is an undergrad.";
+    END IF;
+    IF EXISTS(SELECT * FROM Student, TeachingAssistant WHERE NEW.student_id = Student.id = TeachingAssistant.student_id GROUP BY TeachingAssistant.student_id HAVING count(TeachingAssistant.student_id) >= 2)
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Student is teaching too many courses";
+    END IF;
+END$$
+
+DELIMITER $$
+CREATE TRIGGER grad_student_TA_signup_hours AFTER INSERT ON TeachingAssistant FOR EACH ROW
+BEGIN
+    IF EXISTS(SELECT TeachingAssistant.num_hours FROM TeachingAssistant, Section, Term WHERE TeachingAssistant.section_id = Section.id AND Section.term_id = Term.id AND NEW.student_id = TeachingAssistant.student_id GROUP BY Term.year HAVING SUM(TeachingAssistant.num_hours) > 260) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Student is teaching too many courses or has insufficient GPA";
+        DELETE FROM TeachingAssistant WHERE TeachingAssistant.student_id= New.student_id AND TeachingAssistant.section_id = NEW.section_id AND TeachingAssistant.num_hours = NEW.num_hours;
+    END IF;
+END$$
+
+
 DELIMITER ;
