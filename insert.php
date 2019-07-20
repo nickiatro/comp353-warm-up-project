@@ -50,51 +50,54 @@ $searchCriteria = "";
 $queryString = "";
 $sqlErrorMessage="";
 
-    if (isset($_POST["submit1"])) {
-        if (isset($_POST["tables"])) {
-            for ($i = 0; $i < count($_POST["tables"]); $i++) {
-                $tablesInQuery = $tablesInQuery . $_POST["tables"][$i];
-                if ($i + 1 != count($_POST["tables"])) {
-                    $tablesInQuery = $tablesInQuery . ", ";
-                }
+if (isset($_POST["submit1"])) {
+    if (isset($_POST["tables"])) {
+        for ($i = 0; $i < count($_POST["tables"]); $i++) {
+            $tablesInQuery = $tablesInQuery . $_POST["tables"][$i];
+            if ($i + 1 != count($_POST["tables"])) {
+                $tablesInQuery = $tablesInQuery . ", ";
             }
-
         }
-        $_SESSION["tables"] = $tablesInQuery;
+
+    }
+    $_SESSION["tables"] = $tablesInQuery;
+    $tableSelect = "style = \"visibility: hidden;\"";
+    $attributeSelect = "style = \"visibility: visible;\"";
+}
+
+elseif (isset($_POST["submit2"])) {
+    if (isset($_POST["attributes"])) {
+        for ($i = 0; $i < count($_POST["attributes"]); $i++) {
+            $attributesInQuery = $attributesInQuery . $_POST["attributes"][$i];
+            if ($i + 1 != count($_POST["attributes"])) {
+                $attributesInQuery = $attributesInQuery . ", ";
+            }
+            $_SESSION["attributes"] = $attributesInQuery;
+            $tableSelect = "style = \"visibility: hidden;\"";
+            $attributeSelect = "style = \"visibility: hidden;\"";}
+    }
+    if (isset($_POST["values"])){
+        $_SESSION["values"] = $_POST["values"];
+    }
+
+    $query = "INSERT INTO ". $_SESSION["tables"] . "(" . $_SESSION["attributes"] . ") VALUES(". $_SESSION["values"] .");";
+    $queryString = $query;
+
+    if ($conn->query($query)) {
+        $showResults = "style = \"visibility: visible;\"";
         $tableSelect = "style = \"visibility: hidden;\"";
-        $attributeSelect = "style = \"visibility: visible;\"";
+    }
+    else {
+        $sqlErrorMessage = $conn->error;
+        $showResults = "style = \"visibility: hidden;\"";
+        $tableSelect = "style = \"visibility: hidden;\"";
     }
 
-    elseif (isset($_POST["submit2"])) {
-        if (isset($_POST["attributes"])) {
-            for ($i = 0; $i < count($_POST["attributes"]); $i++) {
-                $attributesInQuery = $attributesInQuery . $_POST["attributes"][$i];
-                if ($i + 1 != count($_POST["attributes"])) {
-                    $attributesInQuery = $attributesInQuery . ", ";
-                }
-                $_SESSION["attributes"] = $attributesInQuery;
-                $tableSelect = "style = \"visibility: hidden;\"";
-                $attributeSelect = "style = \"visibility: hidden;\"";}
-        }
-        if (isset($_POST["search"])){
-            $_SESSION["search"] = $_POST["search"];
-        }
-        $query = "SELECT " . $_SESSION["attributes"] . " FROM " . $_SESSION["tables"] . " " . $_SESSION["search"] . ";";
-        $queryString = $query;
-
-        if ($conn->query($query)) {
-            $showResults = "style = \"visibility: visible;\"";
-            $tableSelect = "style = \"visibility: hidden;\"";
-        }
-        else {
-            $sqlErrorMessage = $conn->error;
-        }
-
-        if ($sqlErrorMessage != ""){
-            $sqlError = "style = \"visibility: visible;\"";
-            $tableSelect = "style = \"visibility: hidden;\"";
-        }
+    if ($sqlErrorMessage != ""){
+        $sqlError = "style = \"visibility: visible;\"";
+        $tableSelect = "style = \"visibility: hidden;\"";
     }
+}
 
 $selectedTables = explode(",", $tablesInQuery);
 $result = [];
@@ -108,21 +111,9 @@ for ($i = 0; $i < count($selectedTables); $i++) {
 
     $columnArr = array_column($result, 'COLUMN_NAME');
 
-    for ($j = 0; $j < count($columnArr); $j++) {
-        $columnArr[$j] = $selectedTables[$i] . "." . $columnArr[$j];
-    }
-
     $attributes = array_merge($attributes, $columnArr);
 }
 
-$countArray = [];
-
-for ($i = 0; $i < count($attributes); $i++) {
-    $countString = "COUNT(".$attributes[$i].")";
-    array_push($countArray, $countString);
-}
-
-$attributes = array_merge($attributes, $countArray);
 ?>
 
 <!doctype html>
@@ -180,24 +171,6 @@ $attributes = array_merge($attributes, $countArray);
         text-align: center;
     }
 
-    .search {
-        background-color: rgb(128, 128, 128);
-        background-color: rgba(128,128,128, 0.4);
-        color: lightgrey;
-        font-weight: bold;
-        font-size: 100%;
-        font-family: "Cambria Math", sans-serif;
-        border: 3px solid #f1f1f1;
-        position: absolute;
-        top: 25%;
-        left: 50%;
-        transform: translate(-50%, 140%);
-        z-index: 2;
-        width: 40%;
-        padding: 20px;
-        text-align: center;
-    }
-
     .results {
         background-color: rgb(128, 128, 128);
         background-color: rgba(128,128,128, 0.4);
@@ -230,30 +203,29 @@ $attributes = array_merge($attributes, $countArray);
     }
 
 </style>
-<title>Search Records | Concordia University Database System</title>
+<title>Insert Records | Concordia University Database System</title>
 <body>
 <div class="background"></div>
 <div class="titleBox">
-    <p>Search Records<br />
+    <p>Insert Records<br />
     </p>
 </div>
 <div class="selection" <?php echo $tableSelect;?>>
-    <form name="tablesForm" action="./search.php" method="post">
-        <label>Please Select the Tables You Would Like to Search <br/>
-            <small><em>Hold Down the Ctrl/Command Key to Select Multiple Tables</em></small>
+    <form name="tablesForm" action="./insert.php" method="post">
+        <label>Please Select the Table into which You Would Like to Insert a Record<br/>
         </label>
         <?php
-            echo "<br/><select name=\"tables[]\" multiple>";
-            foreach($tableNames as $tableName) {
-                echo "<option value=\"$tableName\">$tableName</option>";
-            }
-            echo "</select><br/>";
-            ?>
+        echo "<br/><select name=\"tables[]\">";
+        foreach($tableNames as $tableName) {
+            echo "<option value=\"$tableName\">$tableName</option>";
+        }
+        echo "</select><br/>";
+        ?>
         <input type="submit" name="submit1">
     </form>
 </div>
 <div class="selection" <?php echo $attributeSelect;?>>
-    <form name="attributesForm" action="./search.php" method="post">
+    <form name="attributesForm" action="./insert.php" method="post">
         <label>Please Select the Attributes You Would like to Display <br/>
             <small><em>Hold Down the Ctrl/Command Key to Select Multiple Attributes</em></small>
         </label>
@@ -264,52 +236,52 @@ $attributes = array_merge($attributes, $countArray);
         }
         echo "</select><br/>";
         ?>
-        <div class="search" <?php echo $attributeSelect;?>>
-            <label>Please Enter the Search Criteria <br/>
+
+        <label>Please Enter the Values to Insert <br/>
                 <small><em>Please Use MySQL Syntax</em></small>
             </label>
-            <input type="text" name="search"/>
+            <input type="text" name="values"/>
             <input type="submit" name="submit2">
-        </div>
     </form>
 </div>
 <div class="selection" <?php echo $sqlError;?>>
-    <form name="mySQLError" action="./search.php" method="post">
+    <form name="mySQLError" action="./insert.php" method="post">
         <label>MySQL Error Message</label>
         <?php
-            echo "<p>$sqlErrorMessage</p>";
+        echo "<p>$sqlErrorMessage</p>";
         ?>
         <a href="./home.php">Return to Homepage</a>
     </form>
 </div>
 <div class="results" <?php echo $showResults;?>>
-    <form name="results" action="./search.php" method="post">
-        <label>Results<br /></label>
+    <form name="results" action="./insert.php" method="post">
+        <label><?php echo $_SESSION["tables"]?> Table Contents<br /></label>
         <?php
-            if ($showResults == "style = \"visibility: visible;\""){
-                $result = $conn->query($queryString);
+        if ($showResults == "style = \"visibility: visible;\"") {
 
-                echo "<table><tr>";
-                for($i = 0; $i < mysqli_num_fields($result); $i++) {
-                    $field_info = mysqli_fetch_field($result);
-                    echo "<th>{$field_info->name}</th>";
-                }
+            $queryString = "SELECT * FROM " . $_SESSION["tables"].";";
 
-                while($row = mysqli_fetch_row($result)) {
-                    echo "<tr>";
-                    foreach($row as $_column) {
-                        echo "<td>{$_column}</td>";
-                    }
-                    echo "</tr>";
-                }
+            $result = $conn->query($queryString);
 
-                echo "</table>";
+            echo "<table><tr>";
+            for($i = 0; $i < mysqli_num_fields($result); $i++) {
+                $field_info = mysqli_fetch_field($result);
+                echo "<th>{$field_info->name}</th>";
             }
+
+            while($row = mysqli_fetch_row($result)) {
+                echo "<tr>";
+                foreach($row as $_column) {
+                    echo "<td>{$_column}</td>";
+                }
+                echo "</tr>";
+            }
+
+            echo "</table>";
+        }
         ?>
         <a href="./home.php">Return to Homepage</a>
     </form>
 </div>
 </body>
 </html>
-
-
