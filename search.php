@@ -47,7 +47,7 @@ $showResults = "style = \"visibility: hidden;\"";
 $tablesInQuery = "";
 $attributesInQuery = "";
 $searchCriteria = "";
-
+$queryString = "";
 $sqlErrorMessage="";
 
     if (isset($_POST["submit1"])) {
@@ -80,9 +80,11 @@ $sqlErrorMessage="";
             $_SESSION["search"] = $_POST["search"];
         }
         $query = "SELECT " . $_SESSION["attributes"] . " FROM " . $_SESSION["tables"] . " " . $_SESSION["search"] . ";";
+        $queryString = $query;
 
         if ($conn->query($query)) {
-
+            $showResults = "style = \"visibility: visible;\"";
+            $tableSelect = "style = \"visibility: hidden;\"";
         }
 
         if (!$conn->query($query)) {
@@ -197,6 +199,23 @@ $attributes = array_merge($attributes, $countArray);
         text-align: center;
     }
 
+    .results {
+        background-color: rgb(128, 128, 128);
+        background-color: rgba(128,128,128, 0.4);
+        color: lightgrey;
+        font-weight: bold;
+        font-size: 150%;
+        font-family: "Cambria Math", sans-serif;
+        border: 3px solid #f1f1f1;
+        position: absolute;
+        top: 25%;
+        left: 50%;
+        transform: translate(-50%, 0%);
+        z-index: 2;
+        width: 80%;
+        padding: 20px;
+        text-align: center;
+    }
     a{
         color: lightgrey;
     }
@@ -256,7 +275,7 @@ $attributes = array_merge($attributes, $countArray);
     </form>
 </div>
 <div class="selection" <?php echo $sqlError;?>>
-    <form name="tablesForm" action="./search.php" method="post">
+    <form name="mySQLError" action="./search.php" method="post">
         <label>MySQL Error Message</label>
         <?php
             echo "<p>$sqlErrorMessage</p>";
@@ -264,11 +283,29 @@ $attributes = array_merge($attributes, $countArray);
         <a href="./home.php">Return to Homepage</a>
     </form>
 </div>
-<div class="selection" <?php echo $showResults;?>>
-    <form name="tablesForm" action="./search.php" method="post">
+<div class="results" <?php echo $showResults;?>>
+    <form name="results" action="./search.php" method="post">
         <label>Results<br /></label>
         <?php
-            
+            if ($conn->query($queryString)){
+                $result = $conn->query($queryString);
+
+                echo "<table><tr>";
+                for($i = 0; $i < mysqli_num_fields($result); $i++) {
+                    $field_info = mysqli_fetch_field($result);
+                    echo "<th>{$field_info->name}</th>";
+                }
+
+                while($row = mysqli_fetch_row($result)) {
+                    echo "<tr>";
+                    foreach($row as $_column) {
+                        echo "<td>{$_column}</td>";
+                    }
+                    echo "</tr>";
+                }
+
+                echo "</table>";
+            }
         ?>
         <a href="./home.php">Return to Homepage</a>
     </form>
