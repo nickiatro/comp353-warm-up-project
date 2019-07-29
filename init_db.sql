@@ -225,10 +225,9 @@ DELIMITER $$
 CREATE TRIGGER grad_student_TA_signup BEFORE INSERT ON TeachingAssistant FOR EACH ROW
 BEGIN
     IF EXISTS(SELECT * FROM Student, TeachingAssistant WHERE NEW.student_id = Student.id = TeachingAssistant.student_id AND (Student.gpa < 3.2 OR Student.degree = "undergraduate")) THEN
-    IF EXISTS()
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Student has insufficient GPA, or is an undergrad.";
     END IF;
-    IF EXISTS(SELECT * FROM Student, TeachingAssistant WHERE NEW.student_id = Student.id = TeachingAssistant.student_id GROUP BY TeachingAssistant.student_id HAVING count(TeachingAssistant.student_id) >= 2)
+    IF EXISTS(SELECT * FROM Student, TeachingAssistant WHERE NEW.student_id = Student.id = TeachingAssistant.student_id GROUP BY TeachingAssistant.student_id HAVING count(TeachingAssistant.student_id) >= 2) THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Student is teaching too many courses";
     END IF;
 END$$
